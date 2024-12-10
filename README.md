@@ -1,14 +1,15 @@
 # Flask Application with Traefik Reverse Proxy
 
-This project demonstrates a simple Flask application setup using Traefik as a reverse proxy with Docker containers. The setup includes a basic Flask application serving a "Hello, World!" message and Traefik handling the routing and load balancing.
+This project demonstrates a Flask application setup using Traefik as a reverse proxy with Docker containers. The application features blueprints for modular routing, Tailwind CSS for styling, and ProxyFix for secure deployment behind a reverse proxy.
 
 ## Prerequisites
 
 - Docker and Docker Compose installed on your system
 - Git (optional, for cloning the repository)
-- Add the following entries to your hosts file:
 
-### For macOS and Linux:
+### Host Configuration
+
+#### For macOS and Linux:
 1. Open Terminal
 2. Edit the hosts file using sudo:
    ```bash
@@ -24,7 +25,7 @@ This project demonstrates a simple Flask application setup using Traefik as a re
    - Press `Y` to confirm
    - Press `Enter` to save
 
-### For Windows:
+#### For Windows:
 1. Open Notepad as Administrator
    - Right-click on Notepad
    - Select "Run as administrator"
@@ -45,12 +46,39 @@ This project demonstrates a simple Flask application setup using Traefik as a re
 ```
 flask-traefik/
 ├── app/
-│   ├── app.py              # Flask application
+│   ├── routes/
+│   │   ├── __init__.py
+│   │   └── main.py         # Blueprint routes
+│   ├── templates/
+│   │   ├── base.html       # Base template with Tailwind CSS
+│   │   ├── index.html      # Home page template
+│   │   └── about.html      # About page template
+│   ├── app.py             # Main application with ProxyFix
 │   └── requirements.txt    # Python dependencies
 ├── docker-compose.yml      # Docker Compose configuration
 ├── Dockerfile             # Flask app container configuration
 └── traefik.yaml          # Traefik static configuration
 ```
+
+## Features
+
+### Flask Application
+- Modular routing using Blueprints
+- Tailwind CSS for modern, responsive styling
+- ProxyFix middleware for secure proxy header handling
+- Security headers implementation:
+  - HSTS (HTTP Strict Transport Security)
+  - Content Security Policy (CSP)
+  - X-Frame-Options
+  - X-Content-Type-Options
+  - X-XSS-Protection
+
+### Traefik Integration
+- Version: v3.2.1
+- Reverse proxy and load balancer
+- Automatic service discovery
+- Web dashboard for monitoring
+- Secure routing based on hostnames
 
 ## Installation and Setup
 
@@ -77,49 +105,46 @@ After starting the services, you can access:
 
 1. **Flask Application**:
    - URL: http://flask.localhost
-   - This will display the "Hello, World!" message
+   - Features:
+     - Home page with welcome message
+     - About page with project details
+     - Responsive navigation
+     - Modern UI with Tailwind CSS
 
 2. **Traefik Dashboard**:
    - URL: http://traefik.localhost:8080
    - Provides monitoring and management interface for Traefik
 
-## Components
+## Security Considerations
 
-### Flask Application
-- Simple Python web application using Flask
-- Runs in a Python 3.9 container
-- Served using Gunicorn with 3 workers
-- Exposed on port 8000 internally
+The application implements several security measures:
 
-### Traefik
-- Version: v3.2.1
-- Acts as a reverse proxy and load balancer
-- Provides automatic service discovery
-- Features a web dashboard for monitoring
-- Handles routing based on hostnames
+1. **ProxyFix Middleware**:
+   - Properly handles X-Forwarded-For headers
+   - Configures proxy counts for various headers
+   - Ensures correct client IP resolution
 
-## Configuration Details
-
-### Docker Compose
-- Sets up two services: `traefik` and `flask-app`
-- Creates a bridge network for communication
-- Configures labels for Traefik routing
-
-### Traefik Configuration
-- API and dashboard enabled (insecure mode for demonstration)
-- Docker provider enabled
-- Web entrypoint configured on port 80
-- Automatic service discovery from Docker labels
+2. **Security Headers**:
+   - HSTS for enforcing HTTPS
+   - CSP for controlling resource loading
+   - X-Frame-Options to prevent clickjacking
+   - X-Content-Type-Options to prevent MIME-type sniffing
+   - X-XSS-Protection for cross-site scripting protection
 
 ## Dependencies
 
 Python packages required for the Flask application:
 - Flask==3.1.0
 - gunicorn==23.0.0
+- Werkzeug==3.1.3 (includes ProxyFix)
 - Other supporting packages listed in requirements.txt
 
 ## Notes
 
-- This is a development setup and includes insecure settings (like exposed Traefik dashboard)
-- For production use, additional security measures should be implemented
-- The Flask application is a minimal example and can be extended based on requirements
+- This setup includes development-mode settings (like exposed Traefik dashboard)
+- For production deployment:
+  - Enable HTTPS
+  - Configure stricter security policies
+  - Adjust ProxyFix settings based on your proxy setup
+  - Implement proper authentication
+- The Flask application demonstrates basic features and can be extended based on requirements

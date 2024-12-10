@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}About{% endblock %}
+
+{% block content %}
+<div class="bg-white shadow-md rounded-lg p-6">
+    <h1 class="text-3xl font-bold text-gray-800 mb-4">About Us</h1>
+    <div class="space-y-4">
+        <p class="text-gray-600">
+            This is a demonstration of a Flask application using:
+        </p>
+        <ul class="list-disc list-inside text-gray-600 ml-4">
+            <li>Flask Blueprints for modular routing</li>
+            <li>Tailwind CSS for modern styling</li>
+            <li>ProxyFix middleware for secure deployment</li>
+            <li>Traefik as a reverse proxy</li>
+        </ul>
+        <div class="mt-6">
+            <a href="{{ url_for('main.index') }}" 
+               class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-300">
+                Back to Home
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
