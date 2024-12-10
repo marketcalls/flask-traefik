@@ -6,11 +6,39 @@ This project demonstrates a simple Flask application setup using Traefik as a re
 
 - Docker and Docker Compose installed on your system
 - Git (optional, for cloning the repository)
-- Add the following entries to your `/etc/hosts` file:
-  ```
-  127.0.0.1 flask.localhost
-  127.0.0.1 traefik.localhost
-  ```
+- Add the following entries to your hosts file:
+
+### For macOS and Linux:
+1. Open Terminal
+2. Edit the hosts file using sudo:
+   ```bash
+   sudo nano /etc/hosts
+   ```
+3. Add these lines:
+   ```
+   127.0.0.1 flask.localhost
+   127.0.0.1 traefik.localhost
+   ```
+4. Save the file:
+   - Press `Ctrl + X`
+   - Press `Y` to confirm
+   - Press `Enter` to save
+
+### For Windows:
+1. Open Notepad as Administrator
+   - Right-click on Notepad
+   - Select "Run as administrator"
+2. Open the hosts file:
+   - File > Open
+   - Navigate to: `C:\Windows\System32\drivers\etc\`
+   - Change file type to "All Files"
+   - Select the `hosts` file
+3. Add these lines:
+   ```
+   127.0.0.1 flask.localhost
+   127.0.0.1 traefik.localhost
+   ```
+4. Save the file
 
 ## Project Structure
 
