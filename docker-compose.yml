@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  traefik:
+    image: traefik:v3.2.1
+    container_name: traefik
+    command:
+      - "--api.insecure=true"      # Enables the API and dashboard without auth
+      - "--api.dashboard=true"      # Explicitly enable dashboard
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"  # Port for the dashboard
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - web
+    labels:
+      # Enable dashboard through router
+      - "traefik.enable=true"
+      - "traefik.http.routers.dashboard.rule=Host(`traefik.localhost`)"
+      - "traefik.http.routers.dashboard.service=api@internal"
+      - "traefik.http.routers.dashboard.entrypoints=web"
+
+  flask-app:
+    build: .
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.flask.rule=Host(`flask.localhost`)"
+      - "traefik.http.routers.flask.entrypoints=web"
+      - "traefik.http.services.flask.loadbalancer.server.port=8000"
+    networks:
+      - web
+
+networks:
+  web:
+    driver: bridge
