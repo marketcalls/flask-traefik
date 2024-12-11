@@ -26,9 +26,11 @@ services:
 
   flask-app:
     build: .
+    environment:
+      - APPLICATION_ROOT=${APPLICATION_ROOT}
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.flask.rule=Host(`flask.localhost`)"
+      - "traefik.http.routers.flask.rule=Host(`flask.localhost`) && PathPrefix(`${APPLICATION_ROOT}`)"
       - "traefik.http.routers.flask.entrypoints=web"
       - "traefik.http.services.flask.loadbalancer.server.port=8000"
     networks:
